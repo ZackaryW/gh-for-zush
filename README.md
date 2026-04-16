@@ -4,6 +4,14 @@ GitHub-backed zush group wrapper.
 
 This package is not a zush extension. It builds a zush root group with GitHub management commands embedded into zush's reserved `self` surface by passing host-owned `system_commands` to `create_zush_group(...)`.
 
+## Installation
+
+```bash
+pip install git+https://github.com/ZackaryW/gh-for-zush
+```
+
+
+## Features
 Current surface:
 
 - `create_ghzush_group(...)` mirrors zush's root-group factory and returns a zush group
