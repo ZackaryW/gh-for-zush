@@ -1,0 +1,274 @@
+{
+  "0c1ff": {
+    "id": "0c1ff",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "Let package managers own install destinations",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The rebuild should not model installation as git clone plus pull into a custom directory. Installation destinations should be owned by the active package management tool, such as uv, pip, pipx, or another installer backend. Project utilities should not introduce install-root configuration unless a failing test proves a project-owned target path is actually required.",
+    "created_at": "2026-04-16T06:29:03Z",
+    "updated_at": "2026-04-16T06:29:03Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "0e21a": {
+    "id": "0e21a",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "GhConfig uses explicit install, update, and remove command templates",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "GhConfig should model package-manager integration as explicit command templates instead of a coarse installer selector. The config now carries install_cmd, update_cmd, and remove_cmd, and utility methods render each command with resolved repository or package inputs. This keeps the project focused on the command surface it owns without inventing installer-specific behavior beyond template rendering.",
+    "created_at": "2026-04-16T06:37:55Z",
+    "updated_at": "2026-04-16T06:37:55Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "0fd7f": {
+    "id": "0fd7f",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "GhConfig defaults to pip commands with URL-based install and update templates",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "GhConfig now defaults install_cmd to 'pip install {url}', update_cmd to 'pip install -U {url}', and remove_cmd to 'pip uninstall {package}'. Install and update rendering resolve a repository reference into a pip-installable GitHub URL, while removal continues to render from a normalized package name. This keeps the default command surface concrete without adding package-manager-specific config beyond the command templates themselves.",
+    "created_at": "2026-04-16T06:39:36Z",
+    "updated_at": "2026-04-16T06:39:36Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "10ff7": {
+    "id": "10ff7",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "GhConfig requires field-specific placeholders in command templates",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "GhConfig should reject configured command templates that omit the value they are expected to render. install_cmd and update_cmd must include '{url}', and remove_cmd must include '{package}'. This keeps invalid templates from surviving until runtime and makes the command contract explicit at config construction time.",
+    "created_at": "2026-04-16T06:41:43Z",
+    "updated_at": "2026-04-16T06:41:43Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "11239": {
+    "id": "11239",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "cmd.py builds host-owned self commands from GhConfig",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The initial command surface lives in cmd.py and is built as a host-owned system_commands mapping for zush's reserved self group. It currently provides install, update, uninstall, status, and sources commands. install, update, and uninstall render package-manager commands through GhConfig templates and translate config validation failures into Click exceptions, while status and sources expose the current command-template and owner-boundary configuration without requiring a GitHub client.",
+    "created_at": "2026-04-16T06:44:38Z",
+    "updated_at": "2026-04-16T06:44:38Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "128ab": {
+    "id": "128ab",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "create_ghzush_group exposes the host self-command surface including search",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The public package surface now exports GhConfig and create_ghzush_group(...). create_ghzush_group wires cmd.py's host-owned self commands into zush through create_zush_group(..., system_commands=...). The command surface now includes search in addition to install, update, uninstall, status, and sources. search resolves its owner through GhConfig boundary rules and delegates repository lookup to zuu.v202602_1.gh.search_repositories, while main.py now boots the real factory instead of stale scaffold code.",
+    "created_at": "2026-04-16T06:49:04Z",
+    "updated_at": "2026-04-16T06:49:04Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "13f2b": {
+    "id": "13f2b",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "main.py loads GhConfig from environment and create_ghzush_group names zush_config explicitly",
+    "status": "archived",
+    "tags": [],
+    "source": null,
+    "content": "The public factory now makes the zush-side configuration explicit with the zush_config keyword, while main.py no longer relies on an implicit blank GhConfig. The repository entrypoint loads GhConfig from GH_FOR_ZUSH_DEFAULT_OWNER and GH_FOR_ZUSH_ALLOWED_OWNERS, so search can resolve a default owner without changing code. When neither environment variable nor --owner is provided, the search error now points to the missing default-owner configuration instead of implying a hidden mapping exists.",
+    "created_at": "2026-04-16T06:55:12Z",
+    "updated_at": "2026-04-16T07:50:51Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "1432f": {
+    "id": "1432f",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "main.py constructs GhConfig explicitly and passes it to create_ghzush_group",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The repository entrypoint now constructs GhConfig directly inside main.py and passes it explicitly into create_ghzush_group(...). There is no environment-based GhConfig loading path in the public package surface. Search owner resolution for the repository entrypoint therefore depends only on the GhConfig literal constructed in main.py or on an explicit --owner flag at runtime.",
+    "created_at": "2026-04-16T06:58:26Z",
+    "updated_at": "2026-04-16T06:58:26Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "15b51": {
+    "id": "15b51",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "Wrapper allowlists provide the effective default owner for search",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "For the wrapper surface, allowed_owners is not only a boundary. When default_owner is absent but allowed_owners is preset, the first allowed owner becomes the effective default owner for search and status output. This keeps the wrapper usable for non-technical users because a packaged preset can supply a constrained GitHub surface without requiring extra owner input at runtime.",
+    "created_at": "2026-04-16T07:03:12Z",
+    "updated_at": "2026-04-16T07:03:12Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "16377": {
+    "id": "16377",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "cmd.py provides preset-scoped available listing and tabular repository output",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The host command surface now includes self available, which lists repositories across the preset wrapper owner boundary instead of requiring extra end-user configuration. Both self search and self available render repository results as tables with owner, name, updated_at, and description columns using tabulate. This keeps package discovery readable while preserving the preset-driven wrapper model.",
+    "created_at": "2026-04-16T07:08:30Z",
+    "updated_at": "2026-04-16T07:08:30Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "174a9": {
+    "id": "174a9",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "GitHub list and search provider failures surface as Click errors",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The wrapper command surface should not leak raw JSON or traceback failures from the GitHub CLI adapter. cmd.py now translates repository search and repository listing provider failures into Click exceptions, and the built-in available listing treats empty stdout as no results instead of attempting to decode invalid JSON. This keeps wrapper failures user-facing and actionable even when gh returns bad or empty output.",
+    "created_at": "2026-04-16T07:12:44Z",
+    "updated_at": "2026-04-16T07:12:44Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "18e36": {
+    "id": "18e36",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "Wrapper env_prefix presets filter GitHub search and available results",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The wrapper's zush_config.env_prefix values are now routed into the host GitHub command surface. search and available both filter repository results by name prefix before rendering, so wrapper presets such as zush_, zush-, pvt_, and pvt- act as the package-selection boundary for non-technical users. This keeps GitHub inventory output aligned with the wrapper's intended package namespace instead of listing every repository under the allowed owners.",
+    "created_at": "2026-04-16T07:15:15Z",
+    "updated_at": "2026-04-16T07:15:15Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "1965e": {
+    "id": "1965e",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "available writes cached inventory and status reports installed-state from that cache",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The wrapper now has a caching surface for package inventory. self available writes the preset-scoped filtered repository list to a wrapper cache file under zush storage, and self status reads that cached inventory instead of printing command templates. status compares cached repository names against normalized installed Python distribution names to report installed yes or no. Short install targets also resolve through the effective preset owner when the wrapper only provides allowed_owners.",
+    "created_at": "2026-04-16T07:20:54Z",
+    "updated_at": "2026-04-16T07:20:54Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "1ab61": {
+    "id": "1ab61",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "available is cache-first and action commands use unique lossy matches from cached inventory",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "The wrapper inventory surface now treats self available as cache-first: it reads cached inventory by default and refreshes from GitHub only when --refresh is requested. install, update, and uninstall also consult the cached inventory for lossy short-name resolution after wrapper prefix stripping. A short token such as jobqueue resolves to the unique cached preset match zush_jobqueue, but ambiguous matches are rejected instead of guessing.",
+    "created_at": "2026-04-16T07:23:57Z",
+    "updated_at": "2026-04-16T07:23:57Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "1b6f9": {
+    "id": "1b6f9",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "Action commands execute through an injected runner and main strips --dry-run before Click",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "create_system_commands now accepts an injected execute_command callable and uses it for install, update, and uninstall instead of only echoing rendered templates. update also supports --all by selecting cached repositories whose normalized package names are currently installed. The repository entrypoint strips a top-level --dry-run flag before Click parses argv and swaps in a fake executor that echoes the rendered commands, so the wrapper can present a testable installation surface without changing the command tree.",
+    "created_at": "2026-04-16T07:31:25Z",
+    "updated_at": "2026-04-16T07:31:25Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "1cde7": {
+    "id": "1cde7",
+    "group": "architecture_context",
+    "node_type": "architecture",
+    "summary": "pkgconfirm isolates package-resolution lookup behind built-ins and an override hook",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "pkgconfirm.py now owns package-resolution lookup as an internal utility instead of changing GhConfig or the command-template surface. It provides built-in resolution methods for normalized distribution-name matching and prefix-stripped matching, plus a callable override hook for custom lookup behavior. cmd.py reuses that utility for status rendering and update --all package selection, which centralizes installed-package resolution without changing the existing public command surface.",
+    "created_at": "2026-04-16T07:43:27Z",
+    "updated_at": "2026-04-16T07:43:27Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  }
+}

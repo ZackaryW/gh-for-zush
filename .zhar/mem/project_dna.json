@@ -1,0 +1,37 @@
+{
+  "0ac1a": {
+    "id": "0ac1a",
+    "group": "project_dna",
+    "node_type": "core_goal",
+    "summary": "Rebuild gh-for-zush from scratch with TDD-first flow",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": null,
+    "created_at": "2026-04-16T06:21:53Z",
+    "updated_at": "2026-04-16T06:21:53Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent"
+    },
+    "custom": {}
+  },
+  "0b064": {
+    "id": "0b064",
+    "group": "project_dna",
+    "node_type": "core_requirement",
+    "summary": "Start with small utilities, then independent features, then chain them together",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "Development must follow TDD. Start with small utilities first, then add independent features, and only then compose the pieces together. Do not assume architecture or feature shape without explicit user confirmation.",
+    "created_at": "2026-04-16T06:21:53Z",
+    "updated_at": "2026-04-16T06:21:53Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "priority": "high"
+    },
+    "custom": {}
+  }
+}

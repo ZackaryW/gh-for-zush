@@ -1,0 +1,21 @@
+{
+  "1dd5b": {
+    "id": "1dd5b",
+    "group": "problem_tracking",
+    "node_type": "known_issue",
+    "summary": "status misses packages installed outside the uv-run interpreter",
+    "status": "active",
+    "tags": [],
+    "source": null,
+    "content": "self status can report cached packages as not installed when the package was installed into a different Python environment than the interpreter used by `uv run`. Live checks showed bare `python -m pip show zush-jobqueue` resolving to the Scoop Python site-packages directory, while `uv run python` only saw `gh-for-zush` and `zush`. The current status path uses importlib.metadata from the active `uv run` interpreter, so external installs are invisible unless they are exposed through the same runtime environment.",
+    "created_at": "2026-04-16T07:50:52Z",
+    "updated_at": "2026-04-16T07:50:52Z",
+    "expires_at": null,
+    "metadata": {
+      "agent": "zhar-agent",
+      "severity": "med",
+      "issue_type": "bug"
+    },
+    "custom": {}
+  }
+}
